@@ -1,6 +1,9 @@
 import torch
 import numpy as np
 
+import torch._dynamo
+torch._dynamo.config.suppress_errors = True
+
 alpa_ar = {
     0: 'أ',
     1: 'ب',
