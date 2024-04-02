@@ -12,7 +12,7 @@ from util_prompt import prepare_data
 
 
 TOKEN = 'your_huggingface_token'
-
+TOKEN = os.environ['HF_TOKEN']
 if torch.cuda.is_available():
     device = "cuda"
 else:
@@ -40,7 +40,7 @@ def main():
     model_class = LlamaForCausalLM if 'llama' in args.base_model else AutoModelForCausalLM
 
     SAVE_FILE = f'{args.output_folder}/result_prompt_{args.lang_prompt}_alpa_{args.lang_alpa}_{args.base_model.split("/")[-1]}.csv'
-    tokenizer = tokenizer_class.from_pretrained(args.base_model, use_auth_token=TOKEN)
+    tokenizer = tokenizer_class.from_pretrained(args.base_model, use_auth_token=TOKEN, trust_remote_code=True, cache_dir='/tmp/hf_cache')
     
     if 'mt0' in args.base_model or 'arat5' in args.base_model.lower():
         model = AutoModelForSeq2SeqLM.from_pretrained(args.base_model, device_map="auto", load_in_8bit="xxl" in args.base_model)
